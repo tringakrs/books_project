@@ -1,4 +1,12 @@
+import { IsString } from 'class-validator';
+
 export class UpdateGenresDto {
+  @IsString()
   genre?: string;
-  parentId?: number;
+
+  @IsString()
+  subGenre: string;
+
+  // @IsNumber()
+  // parentId?: number;
 }

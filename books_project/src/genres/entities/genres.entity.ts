@@ -16,15 +16,19 @@ export class Genres {
   @Column()
   genre: string;
 
+  @Column()
+  subGenre: string;
+
   @ManyToMany(() => Books, (books) => books.genres)
   books: Books[];
 
-  @OneToMany(() => Genres, (genres) => genres.parent)
-  genres?: Genres[];
+  // @OneToMany(() => Genres, (genres) => genres.parent)
+  // genres?: Genres[];
 
-  @ManyToOne(() => Genres, (genres) => genres.genres, {
-    nullable: true,
-    createForeignKeyConstraints: false,
-  })
-  parent?: Genres;
+  // @ManyToOne(() => Genres, (genres) => genres.genres, {
+  //   nullable: true,
+  //   createForeignKeyConstraints: false,
+
+  // })
+  // parent?: Genres;
 }
