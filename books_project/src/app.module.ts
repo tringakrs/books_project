@@ -11,43 +11,47 @@ import { Books } from './books/entities/books.entities';
 import { Publishers } from './publishers/entities/publishers.entities';
 import { Authors } from './authors/entities/authors.entites';
 import { Genres } from './genres/entities/genres.entity';
+import { JwtModule } from '@nestjs/jwt';
+import { PassportModule } from '@nestjs/passport';
+import { AuthModule } from './auth/auth.module';
+import { UsersModule } from './user/user.module';
+import { UserController } from './user/user.controller';
+import { Users } from 'src/user/entities/user-entity';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       isGlobal: true,
-      //which of the env files we want to use
       envFilePath: ['.env'],
-      //envFilePath: `.env.${process.env.NODE_ENV}`,
     }),
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (config: ConfigService) => {
         return {
           type: 'postgres',
-
           host: config.get<string>('DB_HOST'),
-
           port: config.get<number>('DB_PORT'),
-
           username: config.get<string>('DB_USERNAME'),
-
           password: config.get<string>('DB_PASSWORD'),
-
           database: config.get<string>('DB_NAME'),
-
-          entities: [Books, Publishers, Authors, Genres],
-
+          entities: [Books, Publishers, Authors, Genres, Users],
           synchronize: true,
         };
       },
     }),
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: '1h' },
+    }),
+    PassportModule.register({ defaultStrategy: 'jwt' }),
     BooksModule,
     GenresModule,
     PublisherModule,
     AuthorsModule,
+    AuthModule,
+    UsersModule,
   ],
-  controllers: [AppController],
+  controllers: [AppController, UserController],
   providers: [AppService],
 })
 export class AppModule {}

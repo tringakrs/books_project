@@ -2,12 +2,15 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { Authors } from './entities/authors.entites';
 import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { CreateAuthorsDto } from './dtos/create-authors.dto';
-import { UpdateAuthorsDto } from './dtos/update-authors.dto';
+import { UpdateAuthorsDto, CreateAuthorsDto } from './dtos/task-dto';
 
 @Injectable()
 export class AuthorsService {
   constructor(@InjectRepository(Authors) private repo: Repository<Authors>) {}
+
+  async findByUsername(firstName: string): Promise<Authors> {
+    return await this.repo.findOne({ where: { firstName } });
+  }
 
   async create(createAuthorsDto: CreateAuthorsDto): Promise<Authors> {
     const data = { ...createAuthorsDto };
@@ -26,10 +29,8 @@ export class AuthorsService {
     authorId: number,
     updateAuthorsDto: UpdateAuthorsDto,
   ): Promise<Authors> {
-    const authors = await this.repo.findOneBy({ id: authorId });
-
-    await this.repo.update((await authors).id, updateAuthorsDto);
-
+    const author = await this.repo.findOneBy({ id: authorId });
+    await this.repo.update((await author).id, updateAuthorsDto);
     return await this.repo.findOneBy({ id: authorId });
   }
 

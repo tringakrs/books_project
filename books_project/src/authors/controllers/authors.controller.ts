@@ -10,8 +10,7 @@ import {
 } from '@nestjs/common';
 import { AuthorsService } from '../authors.service';
 import { Authors } from '../entities/authors.entites';
-import { UpdateAuthorsDto } from '../dtos/update-authors.dto';
-import { CreateAuthorsDto } from '../dtos/create-authors.dto';
+import { UpdateAuthorsDto, CreateAuthorsDto } from '../dtos/task-dto';
 
 @Controller('authors')
 export class AuthorsController {
