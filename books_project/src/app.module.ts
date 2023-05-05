@@ -15,7 +15,6 @@ import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './user/user.module';
-import { UserController } from './user/user.controller';
 import { Users } from 'src/user/entities/user-entity';
 
 @Module({
@@ -51,7 +50,7 @@ import { Users } from 'src/user/entities/user-entity';
     AuthModule,
     UsersModule,
   ],
-  controllers: [AppController, UserController],
+  controllers: [AppController],
   providers: [AppService],
 })
 export class AppModule {}

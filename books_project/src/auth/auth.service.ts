@@ -1,31 +1,30 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
+import { validate } from 'class-validator';
 import { Users } from 'src/user/entities/user-entity';
 import { Repository } from 'typeorm';
-import { UsersDto } from '../user/dtos/user.dto';
 import * as bcrypt from 'bcrypt';
-import { validate } from 'class-validator';
 import * as jwt from 'jsonwebtoken';
-import { MailerService } from '../mailer/mailer.service';
+import { UsersDto } from 'src/user/dtos/user.dto';
 
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectRepository(Users) private repo: Repository<Users>,
-    private mailerService: MailerService,
+    @InjectRepository(Users) private usersRepository: Repository<Users>,
   ) {}
 
   async createUser(body: any): Promise<Record<string, any>> {
-    //Validation flag
+    // Validation Flag
     let isOk = false;
 
-    //Transform body into DTO
-    const usersDto = new UsersDto();
-    usersDto.email = body.email;
-    usersDto.password = bcrypt.hashSync(body.password, 10);
+    // Transform body into DTO
+    const userDto = new UsersDto();
+    userDto.email = body.email;
+    userDto.password = bcrypt.hashSync(body.password, 10);
 
     // Validate DTO against validate function from class-validator
-    await validate(usersDto).then((errors) => {
+    await validate(userDto).then((errors) => {
       if (errors.length > 0) {
         throw new Error('Error');
       } else {
@@ -33,7 +32,7 @@ export class AuthService {
       }
     });
     if (isOk) {
-      await this.repo.save(usersDto).catch((error) => {
+      await this.usersRepository.save(userDto).catch((error) => {
         isOk = false;
         throw new Error('Error');
       });
@@ -48,11 +47,15 @@ export class AuthService {
   }
 
   async login(user: any): Promise<Record<string, any>> {
+    // Validation Flag
     let isOk = false;
+
+    // Transform body into DTO
     const userDto = new UsersDto();
     userDto.email = user.email;
     userDto.password = user.password;
 
+    // Validate DTO against validate function from class-validator
     await validate(userDto).then((errors) => {
       if (errors.length > 0) {
         throw new Error('Error');
@@ -63,12 +66,13 @@ export class AuthService {
 
     if (isOk) {
       // Get user information
-      const userDetails = await this.repo.findOne({
+      const userDetails = await this.usersRepository.findOne({
         where: { email: user.email },
       });
       if (userDetails == null) {
         return { status: 401, msg: { msg: 'Invalid credentials' } };
       }
+
       // Check if the given password match with saved password
       const isValid = bcrypt.compareSync(user.password, userDetails.password);
       if (isValid) {
@@ -89,30 +93,8 @@ export class AuthService {
     }
   }
 
-  // async getUserByEmail(email: string): Promise<Users> {
-  //   const user = await this.repo.findOne({ where: { email } });
-  //   return user;
-  // }
-
-  async logout(token: string): Promise<Record<string, any>> {
-    try {
-      // Verify the JWT token to get the email
-      const decoded = jwt.verify(token, 'secret') as { email: string };
-
-      // Get the user from the email
-      const user = await this.getUserByEmail(decoded.email);
-      if (!user) {
-        throw new Error('User not found');
-      }
-
-      return { status: 200, msg: { msg: 'Logout successful' } };
-    } catch (err) {
-      throw new Error('Invalid token');
-    }
-  }
-
   async getUserByEmail(email: string): Promise<Users | null> {
-    return await this.repo.findOne({ where: { email } });
+    return await this.usersRepository.findOne({ where: { email } });
   }
 
   async generateResetPasswordToken(user: Users): Promise<string> {
@@ -131,7 +113,7 @@ export class AuthService {
       return { status: 400, msg: { msg: 'Invalid token' } };
     }
 
-    const user = await this.repo.findOne({
+    const user = await this.usersRepository.findOne({
       where: { email: decoded.email },
     });
 
@@ -141,8 +123,25 @@ export class AuthService {
 
     const hashedPassword = await bcrypt.hash(password, 10);
     user.password = hashedPassword;
-    await this.repo.save(user);
+    await this.usersRepository.save(user);
 
     return { status: 200, msg: { msg: 'Password reset successful' } };
+  }
+
+  async logout(token: string): Promise<Record<string, any>> {
+    try {
+      // Verify the JWT token to get the email
+      const decoded = jwt.verify(token, 'secret') as { email: string };
+
+      // Get the user from the email
+      const user = await this.getUserByEmail(decoded.email);
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      return { status: 200, msg: { msg: 'Logout successful' } };
+    } catch (err) {
+      throw new Error('Invalid token');
+    }
   }
 }

@@ -1,4 +1,5 @@
 import { Entity, Column, PrimaryGeneratedColumn } from 'typeorm';
+import { Role } from 'src/roles/enums/role.enum';
 
 @Entity()
 export class Users {
@@ -11,4 +12,7 @@ export class Users {
 
   @Column({ nullable: true })
   resetToken: string; // New column for reset token
+
+  @Column({ type: 'enum', enum: Role, default: Role.USER })
+  role: Role;
 }

@@ -1,8 +1,16 @@
-import { Body, Controller, Get, Param, Post, Req, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  Post,
+  Req,
+  Res,
+} from '@nestjs/common';
 import { MailerService } from 'src/mailer/mailer.service';
 import { AuthService } from './auth.service';
-import { Users } from 'src/user/entities/user-entity';
-import { UserService } from 'src/user/user.service';
 
 @Controller('auth')
 export class AuthController {
@@ -22,11 +30,6 @@ export class AuthController {
     const auth = await this.authService.login(body);
     res.status(auth.status).json(auth.msg);
   }
-
-  //   @Get(':email')
-  //   async getUserByEmail(@Param('email') email: string): Promise<Users | null> {
-  //     return await this.authService.getUserByEmail(email);
-  //   }
 
   @Post('logout')
   async logout(@Req() req, @Res() res) {
