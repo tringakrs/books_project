@@ -19,4 +19,6 @@ export class CreateBooksDto {
   @IsArray()
   @IsNumber({}, { each: true })
   authorIds?: number[];
+
+  readonly image?: Express.Multer.File;
 }

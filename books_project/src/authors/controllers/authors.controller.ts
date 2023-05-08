@@ -9,7 +9,7 @@ import {
   Put,
 } from '@nestjs/common';
 import { AuthorsService } from '../authors.service';
-import { Authors } from '../entities/authors.entites';
+import { Authors } from '../entities/authors.entity';
 import { UpdateAuthorsDto, CreateAuthorsDto } from '../dtos/task-dto';
 
 @Controller('authors')

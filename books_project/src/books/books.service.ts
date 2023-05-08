@@ -5,11 +5,11 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Books } from './entities/books.entities';
-import { NotFoundError } from 'rxjs';
-import { UpdateBooksDto } from './dtos/update-books.dto copy';
+import { Books } from './entities/books.entity';
+import { UpdateBooksDto } from './dtos/update-books.dto';
 import { CreateBooksDto } from './dtos/create-books.dto';
 import { AuthorsService } from '../authors/authors.service';
+
 @Injectable()
 export class BooksService {
   constructor(

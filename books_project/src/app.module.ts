@@ -7,15 +7,15 @@ import { PublisherModule } from './publishers/publisher.module';
 import { AuthorsModule } from './authors/authors.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Books } from './books/entities/books.entities';
-import { Publishers } from './publishers/entities/publishers.entities';
-import { Authors } from './authors/entities/authors.entites';
+import { Books } from './books/entities/books.entity';
+import { Publishers } from './publishers/entities/publishers.entity';
+import { Authors } from './authors/entities/authors.entity';
 import { Genres } from './genres/entities/genres.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { PassportModule } from '@nestjs/passport';
 import { AuthModule } from './auth/auth.module';
 import { UsersModule } from './user/user.module';
-import { Users } from 'src/user/entities/user-entity';
+import { Users } from './user/entities/user-entity';
 
 @Module({
   imports: [

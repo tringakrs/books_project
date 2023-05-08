@@ -2,7 +2,7 @@ import { Module } from '@nestjs/common';
 import { PublishersController } from './controllers/publishers.controller';
 import { PublishersService } from './publishers.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { Publishers } from './entities/publishers.entities';
+import { Publishers } from './entities/publishers.entity';
 
 @Module({
   imports: [TypeOrmModule.forFeature([Publishers])],

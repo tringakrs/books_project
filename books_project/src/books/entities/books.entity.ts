@@ -1,7 +1,6 @@
-import { IsOptional, IsString } from 'class-validator';
-import { Authors } from 'src/authors/entities/authors.entites';
+import { Authors } from 'src/authors/entities/authors.entity';
 import { Genres } from 'src/genres/entities/genres.entity';
-import { Publishers } from 'src/publishers/entities/publishers.entities';
+import { Publishers } from 'src/publishers/entities/publishers.entity';
 import {
   Column,
   Entity,

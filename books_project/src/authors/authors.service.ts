@@ -1,5 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Authors } from './entities/authors.entites';
+import { Authors } from './entities/authors.entity';
 import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UpdateAuthorsDto, CreateAuthorsDto } from './dtos/task-dto';

@@ -1,4 +1,4 @@
-import { Books } from 'src/books/entities/books.entities';
+import { Books } from 'src/books/entities/books.entity';
 import {
   Column,
   Entity,
