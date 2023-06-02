@@ -1,14 +1,4 @@
-import {
-  Body,
-  Controller,
-  Get,
-  HttpCode,
-  HttpStatus,
-  Param,
-  Post,
-  Req,
-  Res,
-} from '@nestjs/common';
+import { Body, Controller, Param, Post, Req, Res } from '@nestjs/common';
 import { MailerService } from 'src/mailer/mailer.service';
 import { AuthService } from './auth.service';
 
